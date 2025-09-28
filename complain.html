@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complain - Culture Coffee</title>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* Basic Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: url('https://images.unsplash.com/photo-1511920170033-f8396924c348') no-repeat center center/cover;
+      background-attachment: fixed;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .navbar a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navbar a:hover {
+      color: #c59d5f;
+    }
+
+    .navbar .login-btn {
+      background: #6f4e37;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 5px;
+    }
+
+    /* Complain Form Section */
+    .complain-section {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 30px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    .complain-section h1 {
+      margin-bottom: 20px;
+      font-size: 30px;
+      color: #c59d5f;
+    }
+
+    .complain-form input,
+    .complain-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .complain-form button {
+      background: #6f4e37;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .complain-form button:hover {
+      background: #c59d5f;
+    }
+
+    /* Rating Stars */
+    .stars {
+      display: flex;
+      justify-content: center;
+      margin: 15px 0;
+      gap: 8px;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .stars i {
+      color: #ccc;
+      transition: 0.3s;
+    }
+
+    .stars i.active {
+      color: #FFD700;
+    }
+
+    /* Responsive */
+    @media(max-width: 650px) {
+      .complain-section {
+        margin: 20px;
+        padding: 20px;
+      }
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo"><a href="index.html">Culture Coffee</a></div>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="contact.html">Contact</a>
+      <a href="cart.html">🛒</a>
+      <a href="complain.html">Complain</a>
+      <a href="login.html" class="login-btn">Login</a>
+    </div>
+  </div>
+
+  <!-- Complain Form -->
+  <div class="complain-section">
+    <h1>Complain & Feedback</h1>
+    <form class="complain-form" action="https://formspree.io/f/mjkvqqor" method="POST">
+      <input type="text" name="nama" placeholder="Nama Anda" required>
+      <input type="email" name="email" placeholder="Email Anda" required>
+      <textarea name="keluhan" rows="5" placeholder="Tuliskan keluhan Anda..." required></textarea>
+
+      <!-- Rating Stars -->
+      <div class="stars" id="starRating">
+        <i class="fa-solid fa-star" data-value="1"></i>
+        <i class="fa-solid fa-star" data-value="2"></i>
+        <i class="fa-solid fa-star" data-value="3"></i>
+        <i class="fa-solid fa-star" data-value="4"></i>
+        <i class="fa-solid fa-star" data-value="5"></i>
+      </div>
+      <input type="hidden" name="rating" id="ratingInput">
+
+      <button type="submit">Kirim Complain</button>
+    </form>
+  </div>
+
+  <!-- JS Rating Stars -->
+  <script>
+    const stars = document.querySelectorAll('#starRating i');
+    const ratingInput = document.getElementById('ratingInput');
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        const rating = star.getAttribute('data-value');
+        ratingInput.value = rating;
+
+        stars.forEach(s => s.classList.remove('active'));
+        for (let i = 0; i < rating; i++) {
+          stars[i].classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
