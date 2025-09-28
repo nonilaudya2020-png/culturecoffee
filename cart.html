@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keranjang | Culture coffee </title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f2ef;
+      color: #333;
+    }
+
+    /* Navbar */
+    nav {
+      background: #2c2c2c;
+      color: #fff;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #d2a679;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      transition: 0.3s;
+    }
+    nav ul li a:hover {
+      color: #d2a679;
+    }
+    .login-btn {
+      background: #6b3e26;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    /* Cart Section */
+    .cart-container {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #6b3e26;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+      background: #d2a679;
+      color: #fff;
+    }
+
+    .remove-btn {
+      background: #c0392b;
+      color: #fff;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .remove-btn:hover {
+      background: #a93226;
+    }
+
+    .total {
+      text-align: right;
+      margin-top: 20px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #6b3e26;
+    }
+
+    .checkout-btn {
+      display: block;
+      margin: 30px auto 0;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      background: #6b3e26;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .checkout-btn:hover {
+      background: #8b5742;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Culture Coffee ☕</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">🛒<span id="cartCount" class="cart-counter">0</span></a></li>
+      <li><a href="complain.html">Complain</a></li>
+      <li><a href="#" class="login-btn">LOGIN</a></li>
+    </ul>
+  </nav>
+
+  <!-- Cart Section -->
+  <div class="cart-container">
+    <h2>Keranjang Belanja</h2>
+    <table id="cartTable">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Harga</th>
+          <th>Jumlah</th>
+          <th>Total</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Isi keranjang muncul di sini -->
+      </tbody>
+    </table>
+    <div class="total" id="cartTotal">Total: Rp0</div>
+    <button class="checkout-btn" onclick="checkout()">Checkout</button>
+  </div>
+
+  <script>
+    // Ambil data keranjang dari localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderCart() {
+      const cartTableBody = document.querySelector('#cartTable tbody');
+      cartTableBody.innerHTML = '';
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const row = document.createElement('tr');
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>Rp${item.price.toLocaleString()}</td>
+          <td>${item.quantity}</td>
+          <td>Rp${itemTotal.toLocaleString()}</td>
+          <td><button class="remove-btn" onclick="removeItem(${index})">Hapus</button></td>
+        `;
+        cartTableBody.appendChild(row);
+      });
+
+      document.getElementById('cartTotal').innerText = 'Total: Rp' + total.toLocaleString();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert('Keranjang masih kosong!');
+        return;
+      }
+      alert('Terima kasih sudah memesan di Culture Coffee! ☕');
+      cart = [];
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+    }
+
+    // Render cart saat halaman dibuka
+    renderCart();
+  </script>
+</body>
+</html>
+
