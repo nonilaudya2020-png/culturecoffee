@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Culture Coffee</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: rgba(0, 0, 0, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav .logo {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #d4a373;
+    }
+
+    .login-btn {
+      background-color: #5c3d2e;
+      color: #fff !important;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      background-color: #7b4b37;
+    }
+
+    .hero {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 50px 20px;
+    }
+
+    .hero h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.8;
+      color: #f1f1f1;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      padding: 15px;
+      font-size: 0.9em;
+    }
+
+    /* Section About Culture Coffee */
+    .about {
+      background: rgba(0,0,0,0.7);
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .about h2 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+      color: #d4a373;
+    }
+
+    .about p {
+      max-width: 800px;
+      margin: auto;
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #f1f1f1;
+    }
+
+    .about .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 40px;
+      gap: 20px;
+    }
+
+    .about .card {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      width: 250px;
+    }
+
+    .about .card h3 {
+      color:#d4a373;
+      margin-bottom: 10px;
+    }
+
+    .about .card p {
+      font-size: 0.95em;
+      color: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Culture Coffee ☕</div>
+    <ul id="navbar">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">🛒</a></li>
+      <li><a href="complain.html">Complain</a></li>
+      <li><a href="login.html" class="login-btn">LOGIN</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div>
+      <h1>Welcome to Culture Coffee</h1>
+      <p>
+        Nikmati secangkir kopi terbaik yang dipilih dari biji kopi pilihan, 
+        diproses dengan cinta, dan disajikan dengan penuh kehangatan.  
+        Rasakan aroma yang menggoda, rasa yang mendalam, dan suasana 
+        yang membawa Anda ke pengalaman ngopi yang berbeda.  
+        Culture Coffee bukan sekadar kopi, tapi sebuah cerita, 
+        budaya, dan kenangan dalam setiap tegukan.
+      </p>
+    </div>
+  </section>
+
+  <!-- About Culture Coffee -->
+  <section class="about">
+    <h2>Kenapa <span style="color:#fff;">Culture Coffee</span>?</h2>
+    <p>
+      Nama <strong>Culture Coffee</strong> dipilih karena kami percaya bahwa kopi 
+      bukan hanya tentang rasa, tetapi juga tentang <em>budaya</em>, <em>kebersamaan</em>, 
+      dan <em>cerita</em> di balik setiap cangkir.  
+      Setiap seduhan memiliki filosofi, setiap aroma punya makna, 
+      dan setiap tegukan adalah bagian dari perjalanan hidup yang berharga.  
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>☕ Filosofi Kopi</h3>
+        <p>Setiap biji kopi adalah simbol perjalanan panjang dari petani hingga ke meja Anda.</p>
+      </div>
+      <div class="card">
+        <h3>🌍 Budaya & Cerita</h3>
+        <p>Kopi menghubungkan berbagai budaya, menciptakan ruang untuk berbagi cerita dan kehangatan.</p>
+      </div>
+      <div class="card">
+        <h3>🤝 Kebersamaan</h3>
+        <p>Secangkir kopi selalu lebih nikmat ketika dinikmati bersama orang-orang terdekat.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Culture Coffee | "Every cup tells a story" <br>
+    <i>"Life begins after coffee."</i>
+  </footer>
+</body>
+</html>
