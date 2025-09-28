@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu | Culture Coffee</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f2ef;
+      color: #333;
+    }
+
+    /* Navbar */
+    nav {
+      background: #2c2c2c;
+      color: #fff;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #d2a679;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      transition: 0.3s;
+    }
+    nav ul li a:hover {
+      color: #d2a679;
+    }
+    .login-btn {
+      background: #6b3e26;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    .cart-counter {
+      background: #d2a679;
+      color: #fff;
+      font-size: 0.8rem;
+      padding: 2px 6px;
+      border-radius: 50%;
+      margin-left: 5px;
+    }
+
+    /* Menu Layout */
+    .menu-section {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h2 {
+      color: #6b3e26;
+      border-bottom: 2px solid #d2a679;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .menu-item {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+      padding: 15px;
+    }
+    .menu-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .menu-item h3 {
+      margin: 10px 0 5px;
+      color: #333;
+    }
+    .menu-item p {
+      margin: 5px 0;
+      font-weight: bold;
+      color: #6b3e26;
+    }
+    .menu-item button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      background: #d2a679;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .menu-item button:hover {
+      background: #b58350;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Culture Coffee ☕</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">🛒 <span id="cartCount" class="cart-counter">0</span></a></li>
+      <li><a href="complain.html">Complain</a></li>
+      <li><a href="#" class="login-btn">LOGIN</a></li>
+    </ul>
+  </nav>
+
+  <!-- Menu Coffee -->
+  <div class="menu-section">
+    <h2>Menu Coffee</h2>
+    <div class="menu-grid" id="coffeeMenu"></div>
+  </div>
+
+  <!-- Menu Non-Coffee -->
+  <div class="menu-section">
+    <h2>Menu Non-Coffee</h2>
+    <div class="menu-grid" id="nonCoffeeMenu"></div>
+  </div>
+
+  <!-- Menu Snack -->
+  <div class="menu-section">
+    <h2>Menu Makanan Ringan / Snack</h2>
+    <div class="menu-grid" id="snackMenu"></div>
+  </div>
+
+  <script>
+    // Data Menu
+    const coffeeMenu = [
+      {name: "Espresso", price: 18000, img: "https://i.ibb.co.com/BKsCg4WJ/espresso.jpg"},
+      {name: "Americano", price: 20000, img: "https://i.ibb.co.com/sdq34F1z/americano.jpg"},
+      {name: "Cappuccino", price: 25000, img: "https://i.ibb.co.com/chTpDLhr/capucino.jpg"},
+      {name: "Café Latte", price: 25000, img: "https://i.ibb.co.com/8DKTfwkx/cafe-latte.jpg"},
+      {name: "Flat White", price: 28000, img: "https://i.ibb.co.com/FkSqs4Lb/flatwhite.jpg"},
+      {name: "Macchiato", price: 22000, img: "https://i.ibb.co.com/nsJTxXt8/macchiato.jpg"},
+      {name: "Mocha", price: 28000, img: "https://i.ibb.co.com/LXhryH57/mocha.jpg"},
+      {name: "Affogato", price: 30000, img: "https://i.ibb.co.com/FbSX0bJ6/affogato.jpg"},
+      {name: "Cold Brew", price: 25000, img: "https://i.ibb.co.com/Q7VqWNBp/coldbrew.jpg"},
+      {name: "Vietnamese Drip Coffee", price: 27000, img: "https://i.ibb.co.com/QvWsmBz9/vietnamese-drip-coffee.jpg"}
+    ];
+
+    const nonCoffeeMenu = [
+      {name: "Matcha Latte", price: 28000, img: "https://i.ibb.co.com/wFs81xRS/matcha-latte.jpg"},
+      {name: "Chocolate (Hot/Iced)", price: 25000, img: "https://i.ibb.co.com/fVYjxF4X/hot-and-choco2.jpg"},
+      {name: "Red Velvet Latte", price: 27000, img: "https://i.ibb.co.com/zV6t0qr2/red-velvet-latte.jpg"},
+      {name: "Taro Latte", price: 27000, img: "https://i.ibb.co.com/TxFjHZrk/taro.jpg"},
+      {name: "Strawberry Milk", price: 23000, img: "https://i.ibb.co.com/23h9LxXc/strawberry-milk.jpg"},
+      {name: "Thai Tea", price: 22000, img: "https://i.ibb.co.com/RTvkn8gV/thai-tea.jpg"},
+      {name: "Lemon Tea", price: 20000, img: "https://i.ibb.co.com/cc4LQV3L/Screenshot-2025-09-28-005429.jpg"},
+      {name: "Lychee Tea", price: 22000, img: "https://i.ibb.co.com/VWz7Q6MB/lychee-tea.jpg"},
+      {name: "Jasmine Tea", price: 18000, img: "https://i.ibb.co.com/pF0CxHp/jasmine-tea.jpg"},
+      {name: "Milkshake", price: 28000, img: "https://i.ibb.co.com/1Gq9KNsp/milk-shake2.jpg"}
+    ];
+
+    const snackMenu = [
+      {name: "Croissant", price: 18000, img: "https://i.ibb.co.com/ym7N9P3c/croissant.jpg"},
+      {name: "Donut", price: 15000, img: "https://i.ibb.co.com/RpP0h7By/donut.jpg"},
+      {name: "Muffin", price: 17000, img: "https://i.ibb.co.com/HLW2bKcj/muffin.jpg"},
+      {name: "Brownies", price: 20000, img: "https://i.ibb.co.com/BXgkrvp/brownies.jpg"},
+      {name: "Cheesecake", price: 28000, img: "https://i.ibb.co.com/RTR5Z84x/cheese-cake.jpg"},
+      {name: "Cookies", price: 12000, img: "https://i.ibb.co.com/Pz1JHQXy/cookies.jpg"},
+      {name: "Waffle", price: 25000, img: "https://i.ibb.co.com/MydTgBQn/waffle.jpg"},
+      {name: "Sandwich", price: 30000, img: "https://i.ibb.co.com/MydTgBQn/waffle.jpg"},
+      {name: "French Fries", price: 18000, img: "https://i.ibb.co.com/yFS6ZXgX/french-fries.jpg"},
+      {name: "Onion Rings", price: 20000, img: "https://i.ibb.co.com/s72n1m6/onion-rings.jpg"}
+    ];
+
+    // Render Menu
+    function renderMenu(menu, containerId) {
+      const container = document.getElementById(containerId);
+      menu.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('menu-item');
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>Rp${item.price.toLocaleString()}</p>
+          <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    renderMenu(coffeeMenu, 'coffeeMenu');
+    renderMenu(nonCoffeeMenu, 'nonCoffeeMenu');
+    renderMenu(snackMenu, 'snackMenu');
+
+    // Cart System
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCartCount();
+
+    function addToCart(name, price) {
+      const existingItem = cart.find(item => item.name === name);
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        cart.push({name, price, quantity: 1});
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartCount();
+      alert(name + " berhasil ditambahkan ke keranjang!");
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+      document.getElementById('cartCount').innerText = count;
+    }
+  </script>
+</body>
+</html>
