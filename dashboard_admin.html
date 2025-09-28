@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - Culture Coffee</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { display: flex; min-height: 100vh; background: var(--bg); color: var(--text); transition: 0.3s; }
+    :root { --bg: #f5f7fa; --text: #333; --card: #fff; --accent: #14b8a6; --danger:#ef4444; --hover:#f0f9ff; }
+    body.dark { --bg: #0f172a; --text: #e2e8f0; --card: #1e293b; --accent: #8b5cf6; --danger:#f87171; --hover:#334155; }
+
+    /* Sidebar */
+    .sidebar { width: 240px; background: var(--card); padding: 20px; border-right: 1px solid #ddd; }
+    .sidebar h2 { margin-bottom: 20px; font-size: 22px; color: var(--accent); display:flex; align-items:center; gap:8px; }
+    .sidebar ul { list-style: none; }
+    .sidebar ul li { margin: 14px 0; }
+    .sidebar ul li a { text-decoration: none; color: var(--text); font-weight: 500; display:flex; align-items:center; gap:10px; padding:8px; border-radius:8px; transition:0.3s; }
+    .sidebar ul li a:hover { background: var(--hover); color: var(--accent); }
+
+    /* Main */
+    .main { flex: 1; padding: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    header h1 { font-size: 22px; }
+    header button { padding: 8px 14px; border: none; border-radius: 6px; cursor: pointer; background: var(--accent); color: #fff; transition:0.3s; }
+    header button:hover { opacity:0.9; }
+
+    /* Cards */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: 0.3s; }
+    .card:hover { transform: translateY(-4px); }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: var(--card); border-radius: 12px; overflow: hidden; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background: var(--accent); color: white; }
+    td button { background:none; border:none; cursor:pointer; font-size:16px; margin-right:8px; transition:0.3s; }
+    td button:hover { transform:scale(1.2); }
+
+    /* Forms */
+    form { background: var(--card); padding: 20px; border-radius: 12px; margin-top: 20px; }
+    form input, form select { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; background:var(--bg); color:var(--text); }
+    form button { background: var(--accent); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; transition:0.3s; }
+    form button:hover { opacity: 0.9; }
+
+    .hidden { display: none; }
+    .filters { margin: 15px 0; display: flex; gap: 10px; }
+    .filters input, .filters select { padding: 8px; border-radius: 6px; border: 1px solid #ccc; background:var(--bg); color:var(--text); }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2><i class="fa-solid fa-mug-hot"></i> Culture Coffee</h2>
+    <ul>
+      <li><a href="#" onclick="showSection('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+      <li><a href="#" onclick="showSection('menu')"><i class="fa-solid fa-utensils"></i> Manajemen Menu</a></li>
+      <li><a href="#" onclick="showSection('orders')"><i class="fa-solid fa-receipt"></i> Manajemen Pesanan</a></li>
+      <li><a href="#" onclick="showSection('settings')"><i class="fa-solid fa-gear"></i> Pengaturan</a></li>
+      <li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header>
+      <h1>Dashboard Admin</h1>
+      <button onclick="toggleMode()"><i class="fa-solid fa-moon"></i>/<i class="fa-solid fa-sun"></i></button>
+    </header>
+
+    <!-- Dashboard -->
+    <section id="dashboard">
+      <div class="cards">
+        <div class="card"><h3>Total Menu</h3><p id="totalMenu">0</p></div>
+        <div class="card"><h3>Pesanan Hari Ini</h3><p id="ordersToday">0</p></div>
+        <div class="card"><h3>Total Pendapatan</h3><p id="revenue">Rp 0</p></div>
+        <div class="card"><h3>Menu Paling Laku</h3><p id="bestSeller">-</p></div>
+      </div>
+      <canvas id="salesChart"></canvas>
+    </section>
+
+    <!-- Menu Management -->
+    <section id="menu" class="hidden">
+      <h2>Manajemen Menu</h2>
+      <form id="menuForm">
+        <input type="text" id="menuName" placeholder="Nama Menu" required>
+        <input type="number" id="menuPrice" placeholder="Harga" required>
+        <select id="menuCategory">
+          <option value="Coffee">Coffee</option>
+          <option value="Non-Coffee">Non-Coffee</option>
+          <option value="Snack">Snack</option>
+        </select>
+        <button type="submit"><i class="fa-solid fa-plus"></i> Tambah Menu</button>
+      </form>
+
+      <!-- Filter & Search -->
+      <div class="filters">
+        <input type="text" id="searchMenu" placeholder="Cari menu...">
+        <select id="filterCategory">
+          <option value="All">Semua</option>
+          <option value="Coffee">Coffee</option>
+          <option value="Non-Coffee">Non-Coffee</option>
+          <option value="Snack">Snack</option>
+        </select>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Nama</th><th>Harga</th><th>Kategori</th><th>Aksi</th></tr>
+        </thead>
+        <tbody id="menuTable"></tbody>
+      </table>
+    </section>
+
+    <!-- Orders -->
+    <section id="orders" class="hidden">
+      <h2>Daftar Pesanan</h2>
+      <table>
+        <thead>
+          <tr><th>Nama</th><th>Menu</th><th>Jumlah</th><th>Total</th><th>Status</th><th>Aksi</th></tr>
+        </thead>
+        <tbody id="ordersTable"></tbody>
+      </table>
+    </section>
+
+    <!-- Settings -->
+    <section id="settings" class="hidden">
+      <h2>Pengaturan</h2>
+      <form>
+        <input type="text" placeholder="Nama Coffee Shop" value="Culture Coffee">
+        <input type="file">
+        <button type="button"><i class="fa-solid fa-save"></i> Simpan</button>
+      </form>
+    </section>
+  </div>
+
+<script>
+  // Mode
+  function toggleMode(){ document.body.classList.toggle("dark"); }
+
+  // Sections
+  function showSection(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+  }
+
+  // Data Menu Lengkap
+  let menuData = [
+    {name:"Espresso", price:18000, category:"Coffee"},
+    {name:"Americano", price:20000, category:"Coffee"},
+    {name:"Cappuccino", price:25000, category:"Coffee"},
+    {name:"Café Latte", price:25000, category:"Coffee"},
+    {name:"Flat White", price:28000, category:"Coffee"},
+    {name:"Macchiato", price:22000, category:"Coffee"},
+    {name:"Mocha", price:28000, category:"Coffee"},
+    {name:"Affogato", price:30000, category:"Coffee"},
+    {name:"Cold Brew", price:25000, category:"Coffee"},
+    {name:"Vietnamese Drip Coffee", price:27000, category:"Coffee"},
+    {name:"Matcha Latte", price:28000, category:"Non-Coffee"},
+    {name:"Chocolate (Hot/Iced)", price:25000, category:"Non-Coffee"},
+    {name:"Red Velvet Latte", price:27000, category:"Non-Coffee"},
+    {name:"Taro Latte", price:27000, category:"Non-Coffee"},
+    {name:"Strawberry Milk", price:23000, category:"Non-Coffee"},
+    {name:"Thai Tea", price:22000, category:"Non-Coffee"},
+    {name:"Lemon Tea", price:20000, category:"Non-Coffee"},
+    {name:"Lychee Tea", price:22000, category:"Non-Coffee"},
+    {name:"Jasmine Tea", price:18000, category:"Non-Coffee"},
+    {name:"Milkshake (Vanilla/Chocolate/Strawberry)", price:28000, category:"Non-Coffee"},
+    {name:"Croissant", price:18000, category:"Snack"},
+    {name:"Donut", price:15000, category:"Snack"},
+    {name:"Muffin", price:17000, category:"Snack"},
+    {name:"Brownies", price:20000, category:"Snack"},
+    {name:"Cheesecake", price:28000, category:"Snack"},
+    {name:"Cookies", price:12000, category:"Snack"},
+    {name:"Waffle", price:25000, category:"Snack"},
+    {name:"Sandwich", price:30000, category:"Snack"},
+    {name:"French Fries", price:18000, category:"Snack"},
+    {name:"Onion Rings", price:20000, category:"Snack"}
+  ];
+
+  // Render Menu
+  function renderMenu(){
+    const table=document.getElementById("menuTable"); 
+    const search=document.getElementById("searchMenu").value.toLowerCase();
+    const filter=document.getElementById("filterCategory").value;
+
+    table.innerHTML="";
+    menuData
+      .filter(m=> m.name.toLowerCase().includes(search) && (filter==="All" || m.category===filter))
+      .forEach((m,i)=>{
+        table.innerHTML+=`
+          <tr>
+            <td>${m.name}</td>
+            <td>Rp ${m.price.toLocaleString()}</td>
+            <td>${m.category}</td>
+            <td>
+              <button onclick="editMenu(${i})" style="color:var(--accent)"><i class="fa-solid fa-pen-to-square"></i></button>
+              <button onclick="deleteMenu(${i})" style="color:var(--danger)"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>`;
+      });
+
+    document.getElementById("totalMenu").textContent = menuData.length;
+  }
+
+  // Edit Menu
+  function editMenu(i){
+    let newName=prompt("Ubah Nama:",menuData[i].name);
+    if(newName) menuData[i].name=newName;
+    let newPrice=prompt("Ubah Harga:",menuData[i].price);
+    if(newPrice) menuData[i].price=parseInt(newPrice);
+    let newCategory=prompt("Ubah Kategori (Coffee/Non-Coffee/Snack):",menuData[i].category);
+    if(newCategory) menuData[i].category=newCategory;
+    renderMenu();
+  }
+
+  // Delete Menu
+  function deleteMenu(i){
+    if(confirm("Yakin hapus menu?")){
+      menuData.splice(i,1);
+      renderMenu();
+    }
+  }
+
+  // Tambah Menu
+  document.getElementById("menuForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    menuData.push({
+      name:document.getElementById("menuName").value,
+      price:parseInt(document.getElementById("menuPrice").value),
+      category:document.getElementById("menuCategory").value
+    });
+    e.target.reset(); renderMenu();
+  });
+
+  document.getElementById("searchMenu").addEventListener("input", renderMenu);
+  document.getElementById("filterCategory").addEventListener("change", renderMenu);
+
+  renderMenu();
+
+  // Orders Dummy
+  let orders=[
+    {customer:"Andi", menu:"Cappuccino", qty:2, total:50000, status:"Pending"},
+    {customer:"Budi", menu:"Espresso", qty:1, total:18000, status:"Selesai"},
+  ];
+
+  function renderOrders(){
+    const table=document.getElementById("ordersTable"); table.innerHTML="";
+    orders.forEach((o,i)=>{
+      const icon = o.status==="Pending" ? '<i class="fa-solid fa-hourglass-half"></i>' : '<i class="fa-solid fa-check"></i>';
+      const color = o.status==="Pending" ? "var(--accent)" : "green";
+      table.innerHTML+=`
+        <tr>
+          <td>${o.customer}</td>
+          <td>${o.menu}</td>
+          <td>${o.qty}</td>
+          <td>Rp ${o.total.toLocaleString()}</td>
+          <td>${o.status}</td>
+          <td>
+            <button onclick="toggleStatus(${i})" style="color:${color}">${icon}</button>
+          </td>
+        </tr>`;
+    });
+    document.getElementById("ordersToday").textContent = orders.length;
+    document.getElementById("revenue").textContent = "Rp " + orders.reduce((a,b)=>a+b.total,0).toLocaleString();
+    document.getElementById("bestSeller").textContent = orders[0]?.menu || "-";
+  }
+
+  function toggleStatus(i){
+    orders[i].status = orders[i].status==="Pending" ? "Selesai":"Pending";
+    renderOrders();
+  }
+
+  renderOrders();
+
+  // Chart.js
+  const ctx=document.getElementById("salesChart");
+  new Chart(ctx,{ type:"line", data:{
+    labels:["Jan","Feb","Mar","Apr","Mei","Jun"],
+    datasets:[{label:"Penjualan",data:[5,10,7,15,12,20],borderColor:"#14b8a6",backgroundColor:"rgba(20,184,166,0.2)",fill:true,tension:0.3}]
+  }});
+</script>
+</body>
+</html>
