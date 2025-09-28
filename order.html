@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pemesanan | Culture Coffee</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f2ef;
+      color: #333;
+    }
+
+    /* Navbar */
+    nav {
+      background: #2c2c2c;
+      color: #fff;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #d2a679;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      transition: 0.3s;
+    }
+    nav ul li a:hover {
+      color: #d2a679;
+    }
+
+    /* Container */
+    .order-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #6b3e26;
+      margin-bottom: 20px;
+    }
+
+    /* Form */
+    form label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+
+    /* Order detail */
+    .order-detail {
+      margin: 20px 0;
+    }
+    .order-detail table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .order-detail th, .order-detail td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    .order-detail th {
+      background: #d2a679;
+      color: #fff;
+    }
+    .total {
+      text-align: right;
+      font-size: 1.2rem;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #6b3e26;
+    }
+
+    /* Button */
+    .submit-btn {
+      background: #6b3e26;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto 0;
+    }
+    .submit-btn:hover {
+      background: #8b5742;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Culture Coffee ☕</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html">🛒<span id="cartCount">0</span></a></li>
+      <li><a href="complain.html">Complain</a></li>
+    </ul>
+  </nav>
+
+  <!-- Order Container -->
+  <div class="order-container">
+    <h2>Form Pemesanan</h2>
+    <form id="orderForm">
+      <!-- Data Pemesan -->
+      <label>Nama Lengkap</label>
+      <input type="text" id="nama" required>
+
+      <label>Nomor Telepon</label>
+      <input type="tel" id="telepon" required>
+
+      <label>Alamat Pengiriman</label>
+      <textarea id="alamat" rows="3" required></textarea>
+
+      <!-- Detail Order -->
+      <div class="order-detail">
+        <h3>Detail Pesanan</h3>
+        <table id="orderTable">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Harga</th>
+              <th>Jumlah</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="total" id="orderTotal">Total: Rp0</div>
+      </div>
+
+      <!-- Metode Pembayaran -->
+      <label>Metode Pembayaran</label>
+      <select id="payment" required>
+        <option value="">-- Pilih Metode --</option>
+        <option value="COD">Cash on Delivery (COD)</option>
+        <option value="Transfer">Transfer Bank</option>
+        <option value="E-Wallet">E-Wallet (OVO, Dana, Gopay)</option>
+      </select>
+
+      <button type="submit" class="submit-btn">Konfirmasi Pesanan</button>
+    </form>
+  </div>
+
+  <script>
+    // Ambil cart dari localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function renderOrder() {
+      const orderTableBody = document.querySelector('#orderTable tbody');
+      let total = 0;
+      orderTableBody.innerHTML = '';
+
+      cart.forEach(item => {
+        const row = document.createElement('tr');
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>Rp${item.price.toLocaleString()}</td>
+          <td>${item.quantity}</td>
+          <td>Rp${itemTotal.toLocaleString()}</td>
+        `;
+        orderTableBody.appendChild(row);
+      });
+
+      document.getElementById('orderTotal').innerText = 'Total: Rp' + total.toLocaleString();
+      document.getElementById('cartCount').innerText = cart.length;
+    }
+
+    // Submit form
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nama = document.getElementById('nama').value;
+      const telepon = document.getElementById('telepon').value;
+      const alamat = document.getElementById('alamat').value;
+      const payment = document.getElementById('payment').value;
+
+      if (cart.length === 0) {
+        alert('Keranjang masih kosong!');
+        return;
+      }
+
+      alert(`Terima kasih ${nama}! Pesanan Anda sedang diproses.\n\n📍 Alamat: ${alamat}\n📞 Telepon: ${telepon}\n💳 Pembayaran: ${payment}`);
+
+      // Hapus keranjang setelah order
+      localStorage.removeItem('cart');
+      window.location.href = "index.html";
+    });
+
+    // Render saat halaman dibuka
+    renderOrder();
+  </script>
+</body>
+</html>
